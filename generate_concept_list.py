@@ -30,5 +30,6 @@ for url in description_urls:
 
 #filter out duplicate concepts
 unique = np.array(list(set(concepts)))
+unique.sort()
 print(unique)
 write_concept_csv(unique)

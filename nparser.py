@@ -1,8 +1,16 @@
 # Import necessary libraries
 import nltk  # Natural Language Toolkit for text processing
 
+#these need to be downloaded before the first run, but can be commented out later
 #nltk.download('maxent_ne_chunker')
 #nltk.download('words')
+#nltk.download('punkt')
+#nltk.download('stopwords')
+#nltk.download('averaged_perceptron_tagger')
+#nltk.download('punkt_tab')
+#nltk.download('averaged_perceptron_tagger_eng')
+#nltk.download('maxent_ne_chunker_tab')
+
 import re    # Regular expressions for text cleaning/usr/local/projects/ca-tools/plugins/numishare/Numishare.php
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords  # Stopwords for text filtering
