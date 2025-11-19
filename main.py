@@ -45,7 +45,8 @@ def read_item(text: Union[str, None] = None):
                 cur = conn.cursor()
                 cur.execute('SELECT term,preferred_label,wikidata_uri FROM concepts WHERE term =?', (concept,))
                 row = cur.fetchone()
-                keywords.append(row)    
+                if row is not None:
+                    keywords.append(row)    
             conn.close()
             
             #output rows into JSON response
