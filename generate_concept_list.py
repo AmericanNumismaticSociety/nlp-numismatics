@@ -1,3 +1,7 @@
+#Author: Ethan Gruber
+#Date Modified: August 2025
+#Function: iterate through the obverse and reverse type description sheets for a typology in order to generate a list of NLP concepts for post-processing reconcilation in OpenRefine
+
 # Import necessary libraries
 import csv, urllib.request
 import numpy as np
