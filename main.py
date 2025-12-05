@@ -51,7 +51,7 @@ def read_item(text: Union[str, None] = None):
                 cur = conn.cursor()
                 cur.execute('SELECT term,preferred_label,wikidata_uri FROM concepts WHERE term =?', (concept,))
                 row = cur.fetchone()
-                if row is not None:
+                if row:
                     keywords.append(row)    
             conn.close()
             
@@ -86,18 +86,18 @@ def lookup_uri(identifiers: Union[str, None] = None):
                 cur.execute('SELECT concept,conceptLabel,parent,parentLabel,altLabel,parentAltLabels FROM hier WHERE concept =?', (uri,))            
                 results = cur.fetchall()                
                 
-                if results is not None:
+                if results:
                     object = {"concept": uri}
                     object.update({"label": results[0][1]})
                     
-                    if results[0][4] is not None and len(results[0][4]) > 0:
+                    if results[0][4] and len(results[0][4]) > 0:
                         object.update({"altlabels": results[0][4].split('|')}) 
                                     
                     object.update({"parents": []})
                     for row in results:                    
                         parent = {"uri": row[2], "label": row[3]}
                         
-                        if row[5] is not None and len(row[5]) > 0:
+                        if row[5] and len(row[5]) > 0:
                             labels = row[5].split('|')
                             labelsObject = {"altLabels": labels}
                             parent.update(labelsObject)
