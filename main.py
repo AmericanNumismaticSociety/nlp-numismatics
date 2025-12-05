@@ -95,7 +95,7 @@ def lookup_uri(identifiers: Union[str, None] = None):
                                     
                     object.update({"parents": []})
                     for row in results:                    
-                        parent = {"uri": row[2], "label": row[3]}
+                        parent = {"concept": row[2], "label": row[3]}
                         
                         if row[5] and len(row[5]) > 0:
                             labels = row[5].split('|')
