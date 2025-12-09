@@ -2,14 +2,14 @@
 import nltk  # Natural Language Toolkit for text processing
 
 #these need to be downloaded before the first run, but can be commented out later
-nltk.download('maxent_ne_chunker')
-nltk.download('words')
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('punkt_tab')
-nltk.download('averaged_perceptron_tagger_eng')
-nltk.download('maxent_ne_chunker_tab')
+#nltk.download('maxent_ne_chunker')
+#nltk.download('words')
+#nltk.download('punkt')
+#nltk.download('stopwords')
+#nltk.download('averaged_perceptron_tagger')
+#nltk.download('punkt_tab')
+#nltk.download('averaged_perceptron_tagger_eng')
+#nltk.download('maxent_ne_chunker_tab')
 
 import re    # Regular expressions for text cleaning
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -56,16 +56,17 @@ def parse_description(text):
             
             #filter nouns into concepts for reconciliation    
             
-            #comment these out to run the nnlp service, but uncomment them in order to generate the concept CSV prior to reconciliation in generate_concept_list.py
-            #for i, word_pair in enumerate(tagged_words):        
+            #comment these out to run the nnlp FastAPI service, but uncomment them in order to generate the concept CSV prior to reconciliation in generate_concept_list.py
+            tagged_words = nltk.pos_tag(words)
+            for i, word_pair in enumerate(tagged_words):        
                 #process adjectives + nouns as one concept together, then nouns
-            #    if "JJ" in word_pair[1]:
-            #        if len(tagged_words) > i + 1:
-            #            concept = word_pair[0] + " " + tagged_words[i + 1][0]
-            #            concepts.append(concept)
-            #    elif "NN" in word_pair[1]:
-            #        concept = word_pair[0]
-            #        concepts.append(concept)
+                if "JJ" in word_pair[1]:
+                    if len(tagged_words) > i + 1:
+                        concept = word_pair[0] + " " + tagged_words[i + 1][0]
+                        concepts.append(concept)
+                elif "NN" in word_pair[1]:
+                    concept = word_pair[0]
+                    concepts.append(concept)
             
             
             # Named entity recognition
