@@ -37,7 +37,7 @@ def read_item(text: Union[str, None] = None):
             concepts = []
         
             #text = "Trophy; on right, togate figure of L. Aemilius Paullus; on left, three captives (King Perseus of Macedon and his sons). Border of dots."
-            concept_list = parse_description(text)
+            concept_list = parse_description(text, mode='service')
             concepts = concepts + concept_list
             
             #filter out duplicate concepts and then sort alphabetically

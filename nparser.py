@@ -19,7 +19,7 @@ from nltk.stem.wordnet import WordNetLemmatizer  # Lemmatization
 from nltk import pos_tag, ne_chunk  # Part of speech tagging and named entity recognition
 from nltk.tree import Tree
 
-def parse_description(text):
+def parse_description(text, mode):
     # Tokenization
     concepts = []
     sentences = sent_tokenize(text)
@@ -56,17 +56,18 @@ def parse_description(text):
             
             #filter nouns into concepts for reconciliation    
             
-            #comment these out to run the nnlp FastAPI service, but uncomment them in order to generate the concept CSV prior to reconciliation in generate_concept_list.py
-            tagged_words = nltk.pos_tag(words)
-            for i, word_pair in enumerate(tagged_words):        
-                #process adjectives + nouns as one concept together, then nouns
-                if "JJ" in word_pair[1]:
-                    if len(tagged_words) > i + 1:
-                        concept = word_pair[0] + " " + tagged_words[i + 1][0]
+            #if the mode is 'extract', then analyze tagged words for generating an initial concept list from the type description text. otherwise, this should be skipped when running the FastAPI in mode = 'service'
+            if mode == 'extract':
+                tagged_words = nltk.pos_tag(words)
+                for i, word_pair in enumerate(tagged_words):        
+                    #process adjectives + nouns as one concept together, then nouns
+                    if "JJ" in word_pair[1]:
+                        if len(tagged_words) > i + 1:
+                            concept = word_pair[0] + " " + tagged_words[i + 1][0]
+                            concepts.append(concept)
+                    elif "NN" in word_pair[1]:
+                        concept = word_pair[0]
                         concepts.append(concept)
-                elif "NN" in word_pair[1]:
-                    concept = word_pair[0]
-                    concepts.append(concept)
             
             
             # Named entity recognition

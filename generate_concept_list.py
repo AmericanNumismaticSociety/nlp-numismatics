@@ -32,7 +32,7 @@ def process_type_descriptions(description_urls):
         cr = csv.DictReader(lines, delimiter=',', quotechar='"')
     
         for row in cr:
-            concept_list = parse_description(row['en'])
+            concept_list = parse_description(row['en'], mode='extract')
             concepts = concepts + concept_list
         
     #filter out duplicate concepts
