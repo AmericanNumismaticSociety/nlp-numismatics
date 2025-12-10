@@ -8,7 +8,7 @@ import numpy as np
 import xml.etree.ElementTree as ET
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-CSV = 'crro-concepts-reconciled.csv'
+CSV = 'lco-concepts-reconciled.csv'
 
 #insert concepts array into the hier table the nnlp SQLite database
 def insert_into_db(concepts):
@@ -42,6 +42,22 @@ def write_concept_csv(concepts):
         writer = csv.writer(file)
         writer.writerows(concepts)
 
+#look up Wikidata URI in the hier table to prevent redundancy
+def query_concept_in_db(uri):
+    conn = sqlite3.connect('nnlp.db')
+    cur = conn.cursor()
+    cur.execute('SELECT concept,conceptLabel FROM hier WHERE concept =?', (uri,))            
+    results = cur.fetchone()
+    
+    if results:
+        print(results[1] + " (" + uri + ") already exists in table.")
+        return True
+    else:
+        return False
+    
+    conn.close()
+
+#query Wikdata SPARQL endpoint in order to extract alternative labels and hierarchical labels
 def query_wikidata(uri):
     print ("Querying " + uri)
     sparql = SPARQLWrapper("https://query.wikidata.org/sparql")
@@ -95,16 +111,21 @@ def extract_concepts(filename):
 concepts = extract_concepts(CSV)
 #print(concepts)
              
-concept_rows = [[ "concept", "conceptLabel", "parent", "parentLabel", "altLabel", "parentAltLabels" ]]
+concept_rows = []
 
 #query Wikidata SPARQL endpoint for each URI
 count = 0
 for uri in concepts:
-    rows = query_wikidata(uri)
-    for row in rows:            
-        concept_rows.append(row)
-    #execute HTTP request at 1 per second
-    time.sleep(3)
+    
+    concept_exists = query_concept_in_db(uri)
+    
+    if concept_exists == False:        
+        rows = query_wikidata(uri)
+        for row in rows:            
+            concept_rows.append(row)
+        #execute HTTP request at 1 per second
+        time.sleep(3)
+        
         
 print("Processing completed")
                 
