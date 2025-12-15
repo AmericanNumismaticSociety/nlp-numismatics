@@ -8,7 +8,7 @@ import numpy as np
 import xml.etree.ElementTree as ET
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-CSV = 'lco-concepts-reconciled.csv'
+CSV = 'hrc-concepts-reconciled.csv'
 
 #insert concepts array into the hier table the nnlp SQLite database
 def insert_into_db(concepts):
@@ -111,7 +111,7 @@ def extract_concepts(filename):
 concepts = extract_concepts(CSV)
 #print(concepts)
              
-concept_rows = []
+#concept_rows = []
 
 #query Wikidata SPARQL endpoint for each URI
 count = 0
@@ -121,16 +121,18 @@ for uri in concepts:
     
     if concept_exists == False:        
         rows = query_wikidata(uri)
-        for row in rows:            
-            concept_rows.append(row)
-        #execute HTTP request at 1 per second
+        
+        print("Inserting into database")
+        insert_into_db(rows)
+        
+        #space out HTTP requests
         time.sleep(3)
         
         
 print("Processing completed")
                 
 #write terminologies into database
-print("Inserting into database")
-insert_into_db(concept_rows)
+#print("Inserting into database")
+#insert_into_db(concept_rows)
 
 #end script

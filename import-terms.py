@@ -11,6 +11,7 @@ import numpy as np
 
 #insert concepts array into the hier table the nnlp SQLite database
 def insert_into_db(concepts):
+    
     create_table = """
     CREATE TABLE IF NOT EXISTS concepts (
         id INTEGER PRIMARY KEY,
@@ -21,9 +22,17 @@ def insert_into_db(concepts):
     );
     """
     
+    drop_table = """
+    DROP TABLE IF EXISTS concepts;
+    """
+    
     try:
         with sqlite3.connect('nnlp.db') as conn:
             cursor = conn.cursor()
+            #drop table if it exists prior to reloading unique concepts
+            cursor.execute(drop_table)
+            conn.commit()
+            
             #create table if it doesn't exist
             cursor.execute(create_table)   
             conn.commit()
