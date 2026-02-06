@@ -8,7 +8,7 @@ import numpy as np
 import xml.etree.ElementTree as ET
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-CSV = 'hrc-concepts-reconciled.csv'
+CSV = 'ocre-concepts-reconciled.csv'
 
 #insert concepts array into the hier table the nnlp SQLite database
 def insert_into_db(concepts):

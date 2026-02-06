@@ -62,6 +62,21 @@ def extract_type_descriptions(project):
         return description_urls
             
 
+def process_file(filename):
+    with open(filename) as file:
+        concepts = []
+        
+        lines = [line.rstrip() for line in file]
+        
+        for line in lines:
+            concept_list = parse_description(line, mode='extract')
+            concepts = concepts + concept_list
+            
+        #filter out duplicate concepts
+        unique = np.array(list(set(concepts)))
+        unique.sort()
+        
+        return unique
 
 
 #BEGIN PROCESSING
@@ -83,7 +98,11 @@ if args.project is not None:
 elif args.file is not None:
     filename = args.file
     
-    print("File: " + filename)
+    print("Processing " + filename)
+    
+    concepts = process_file(filename)
+    
+    write_concept_csv(concepts, 'file')
 else:
     print("No project or file specified")
        
